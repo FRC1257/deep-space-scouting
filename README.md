@@ -18,8 +18,6 @@ Complete the necessary setup in Xcode (after plugging the intended device into a
 Distribution
 ------
 
-### Android
-
   * The APK file at `build/app/outputs/apk/release/app-release.apk` can be shared anywhere, through Drive or e-mail.
   * For iOS, compress the generated app into an IPA file. Using a service such as [Diawi](https://diawi.com), it may be possible to distribute said scouting app without necessarily connecting every device to a Mac.
 
