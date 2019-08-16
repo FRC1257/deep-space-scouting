@@ -1,6 +1,5 @@
 # Deep Space Flutter Rebuild
 
-<<<<<<< HEAD
 This is the 2019 Flutter rebuild of the 1257 Deep Space scouting app. This is intended as a guide on which future scouting apps should be built; it is being done here in Flutter for iOS and Android compatibility in order to create a fully exportable and versatile scouting system for other teams.
 
 Instructions to Compile
