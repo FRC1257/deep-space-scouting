@@ -107,7 +107,7 @@ class PitState extends State<Pit> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Reset match?'),
+          title: Text('Reset information?'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -140,7 +140,7 @@ class PitState extends State<Pit> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Submit match?'),
+          title: Text('Submit information?'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -157,7 +157,7 @@ class PitState extends State<Pit> {
                 setState(() {
                   List<String> criteria = [event, team, role, initials, sandstorm, speed, weight, drivetrain, hatchMech, cargoMech, climbMech, helpMech, experience, notes];
                   List<Boolean> bools = [eventRed, teamRed, roleRed, initialsRed, sandstormRed, speedRed, weightRed, drivetrainRed, hatchMechRed, cargoMechRed, climbMechRed, helpMechRed, experienceRed, notesRed];
-                  for (int i = 0; i < 11; i++) {
+                  for (int i = 0; i < criteria.length; i++) {
                     if (criteria[i] == '') {
                       flag = false;
                       bools[i].makeTrue();
@@ -173,7 +173,7 @@ class PitState extends State<Pit> {
                   if (status == 200) {
                     Flushbar(
                         title:  'Send successful',
-                        message:  'Match sent to spreadsheet',
+                        message:  'Information sent to spreadsheet',
                         duration:  Duration(seconds: 2),
                         icon: IconTheme(data: IconThemeData(color: Color(0xFF209020)), child: Icon(Icons.check_circle))
                     ).show(scaffold.currentContext);
@@ -185,17 +185,16 @@ class PitState extends State<Pit> {
                           duration:  Duration(seconds: 2),
                           icon: IconTheme(data: IconThemeData(color: Color(0xFF902020)), child: Icon(Icons.error))
                       ).show(scaffold.currentContext);
-                    } else {
-                      Flushbar(
-                          title:  'Send unsuccessful',
-                          message:  'No connection',
-                          duration:  Duration(seconds: 2),
-                          icon: IconTheme(data: IconThemeData(color: Color(0xFF902020)), child: Icon(Icons.error))
-                      ).show(scaffold.currentContext);
                     }
                     writeText('objectiveLogs', 'objectiveErrorLog.txt', complete);
                   }
                   writeText('objectiveLogs', 'objectiveLog.txt', complete);
+                  Flushbar(
+                      title:  'Save successful',
+                      message:  'Match backed up on file system',
+                      duration:  Duration(seconds: 2),
+                      icon: IconTheme(data: IconThemeData(color: Color(0xFF209020)), child: Icon(Icons.check_circle))
+                  ).show(scaffold.currentContext);
                   reset();
                   // This is the response for if the data is not complete.
                   // Leave it unchanged.
@@ -238,6 +237,468 @@ class PitState extends State<Pit> {
         body: Column(
           children: <Widget>[
             Padding(padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 0.0, top: 12.0), child: Center(child: Text('Pit', style: TextStyle(fontSize: 22)))),
+            Expanded(
+              child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+                child: ListView(
+                  children: <Widget>[
+                    Row(
+                        children: <Widget>[
+                          Flexible(child: Center(child: Text('Event', style: TextStyle(color: eventRed.getBool() ? Color(0xFF902020) : Color(0xFFFFFFFF)))), flex: 3, fit: FlexFit.tight),
+                          Flexible(child: Center(child: Text('Team', style: TextStyle(color: teamRed.getBool() ? Color(0xFF902020) : Color(0xFFFFFFFF)))), flex: 1, fit: FlexFit.tight),
+                          Flexible(child: Center(child: Text('Role', style: TextStyle(color: roleRed.getBool() ? Color(0xFF902020) : Color(0xFFFFFFFF)))), flex: 1, fit: FlexFit.tight),
+                          Flexible(child: Center(child: Text('Initials', style: TextStyle(color: initialsRed.getBool() ? Color(0xFF902020) : Color(0xFFFFFFFF)))), flex: 1, fit: FlexFit.tight)
+                        ]
+                    ),
+                    Padding(
+                        padding: EdgeInsets.only(bottom: 8.0),
+                        child: Row(
+                            children: <Widget>[
+                              Flexible(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                    child: DropdownButtonHideUnderline(
+                                        child: DropdownButton<String>(
+                                          value: event,
+                                          onChanged: (String newValue) {
+                                            setState(() {
+                                              event = newValue;
+                                            });
+                                          },
+                                          items: <String>['', 'Training', 'BE'].map<DropdownMenuItem<String>>((String value) {
+                                            return DropdownMenuItem<String>(
+                                              value: value,
+                                              child: Text(value),
+                                            );
+                                          }).toList(),
+                                        )
+                                    ),
+                                  ),
+                                  flex: 3,
+                                  fit: FlexFit.tight
+                              ),
+                              Flexible(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                    child: TextField(
+                                        textAlign: TextAlign.center,
+                                        controller: teamController,
+                                        decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            hintText: '...'
+                                        ),
+                                        onChanged: (String newValue) {
+                                          setState(() {
+                                            team = newValue;
+                                          });
+                                        },
+                                        keyboardType: TextInputType.number
+                                    ),
+                                  ),
+                                  flex: 1,
+                                  fit: FlexFit.tight
+                              ),
+                              Flexible(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                    child: TextField(
+                                        textAlign: TextAlign.center,
+                                        controller: roleController,
+                                        decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            hintText: '...'
+                                        ),
+                                        onChanged: (String newValue) {
+                                          setState(() {
+                                            role = newValue;
+                                          });
+                                        }
+                                    ),
+                                  ),
+                                  flex: 1,
+                                  fit: FlexFit.tight
+                              ),
+                              Flexible(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                    child: TextField(
+                                        textAlign: TextAlign.center,
+                                        controller: initialsController,
+                                        decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            hintText: '...'
+                                        ),
+                                        onChanged: (String newValue) {
+                                          setState(() {
+                                            initials = newValue;
+                                          });
+                                        }
+                                    ),
+                                  ),
+                                  flex: 1,
+                                  fit: FlexFit.tight
+                              ),
+                            ]
+                        )
+                    ),
+                    Padding(padding: EdgeInsets.only(bottom: 8.0), child: Center(child: Text('Sandstorm', style: TextStyle(fontSize: 18)))),
+                    Row(
+                        children: <Widget>[
+                          Flexible(child: Center(child: Text('Information', style: TextStyle(color: sandstormRed.getBool() ? Color(0xFF902020) : Color(0xFFFFFFFF)))), flex: 1, fit: FlexFit.tight),
+                          Flexible(child: Center(child: Text('Front Hatches')), flex: 1, fit: FlexFit.tight),
+                        ]
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Row(
+                          children: <Widget>[
+                            Flexible(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: DropdownButtonHideUnderline(
+                                      child: DropdownButton<String>(
+                                        value: sandstorm,
+                                        onChanged: (String newValue) {
+                                          setState(() {
+                                            sandstorm = newValue;
+                                          });
+                                        },
+                                        items: <String>['', 'Camera Feed', 'Autonomous', 'Blind'].map<DropdownMenuItem<String>>((String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                      )
+                                  ),
+                                ),
+                                flex: 1,
+                                fit: FlexFit.tight
+                            ),
+                            Flexible(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: Checkbox(
+                                    value: hatches,
+                                    onChanged: (bool newValue) {
+                                      setState(() {
+                                        hatches = newValue;
+                                      });
+                                    },
+                                    activeColor: Color(0xFF97D700),
+                                    checkColor: Color(0xFF51284F),
+                                  )
+                                ),
+                                flex: 1,
+                                fit: FlexFit.tight
+                            ),
+                          ]
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(bottom: 8.0), child: Center(child: Text('Robot', style: TextStyle(fontSize: 18)))),
+                    Row(
+                        children: <Widget>[
+                          Flexible(child: Center(child: Text('Speed', style: TextStyle(color: speedRed.getBool() ? Color(0xFF902020) : Color(0xFFFFFFFF)))), flex: 1, fit: FlexFit.tight),
+                          Flexible(child: Center(child: Text('Weight', style: TextStyle(color: weightRed.getBool() ? Color(0xFF902020) : Color(0xFFFFFFFF)))), flex: 1, fit: FlexFit.tight),
+                          Flexible(child: Center(child: Text('Vision')), flex: 1, fit: FlexFit.tight)
+                        ]
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Row(
+                          children: <Widget>[
+                            Flexible(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: TextField(
+                                      textAlign: TextAlign.center,
+                                      controller: speedController,
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: '...'
+                                      ),
+                                      onChanged: (String newValue) {
+                                        setState(() {
+                                          speed = newValue;
+                                        });
+                                      },
+                                  ),
+                                ),
+                                flex: 1,
+                                fit: FlexFit.tight
+                            ),
+                            Flexible(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: TextField(
+                                      textAlign: TextAlign.center,
+                                      controller: weightController,
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: '...'
+                                      ),
+                                      onChanged: (String newValue) {
+                                        setState(() {
+                                          weight = newValue;
+                                        });
+                                      },
+                                  ),
+                                ),
+                                flex: 1,
+                                fit: FlexFit.tight
+                            ),
+                            Flexible(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: Checkbox(
+                                    value: vision,
+                                    onChanged: (bool newValue) {
+                                      setState(() {
+                                        vision = newValue;
+                                      });
+                                    },
+                                    activeColor: Color(0xFF97D700),
+                                    checkColor: Color(0xFF51284F),
+                                  )
+                                ),
+                                flex: 1,
+                                fit: FlexFit.tight
+                            )
+                          ]
+                      ),
+                    ),
+                    Row(
+                        children: <Widget>[
+                          Flexible(child: Center(child: Text('Drivetrain (type, # motors, motor type)', style: TextStyle(color: drivetrainRed.getBool() ? Color(0xFF902020) : Color(0xFFFFFFFF)))), flex: 1, fit: FlexFit.tight)
+                        ]
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Row(
+                          children: <Widget>[
+                            Flexible(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: TextField(
+                                      textAlign: TextAlign.center,
+                                      controller: drivetrainController,
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: '...'
+                                      ),
+                                      onChanged: (String newValue) {
+                                        setState(() {
+                                          drivetrain = newValue;
+                                        });
+                                      },
+                                  ),
+                                ),
+                                flex: 1,
+                                fit: FlexFit.tight
+                            ),
+                          ]
+                      ),
+                    ),
+                    Row(
+                        children: <Widget>[
+                          Flexible(child: Center(child: Text('Hatch Mechanism', style: TextStyle(color: hatchMechRed.getBool() ? Color(0xFF902020) : Color(0xFFFFFFFF)))), flex: 1, fit: FlexFit.tight),
+                          Flexible(child: Center(child: Text('Cargo Mechanism', style: TextStyle(color: cargoMechRed.getBool() ? Color(0xFF902020) : Color(0xFFFFFFFF)))), flex: 1, fit: FlexFit.tight)
+                        ]
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Row(
+                          children: <Widget>[
+                            Flexible(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: TextField(
+                                      textAlign: TextAlign.center,
+                                      controller: hatchMechController,
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: '...'
+                                      ),
+                                      onChanged: (String newValue) {
+                                        setState(() {
+                                          hatchMech = newValue;
+                                        });
+                                      },
+                                  ),
+                                ),
+                                flex: 1,
+                                fit: FlexFit.tight
+                            ),
+                            Flexible(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: TextField(
+                                      textAlign: TextAlign.center,
+                                      controller: cargoMechController,
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: '...'
+                                      ),
+                                      onChanged: (String newValue) {
+                                        setState(() {
+                                          cargoMech = newValue;
+                                        });
+                                      },
+                                  ),
+                                ),
+                                flex: 1,
+                                fit: FlexFit.tight
+                            ),
+                          ]
+                      ),
+                    ),
+                    Row(
+                        children: <Widget>[
+                          Flexible(child: Center(child: Text('Climb Mechanism', style: TextStyle(color: climbMechRed.getBool() ? Color(0xFF902020) : Color(0xFFFFFFFF)))), flex: 1, fit: FlexFit.tight),
+                          Flexible(child: Center(child: Text('Help Mechanism', style: TextStyle(color: hatchMechRed.getBool() ? Color(0xFF902020) : Color(0xFFFFFFFF)))), flex: 1, fit: FlexFit.tight)
+                        ]
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Row(
+                          children: <Widget>[
+                            Flexible(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: TextField(
+                                    textAlign: TextAlign.center,
+                                    controller: climbMechController,
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: '...'
+                                    ),
+                                    onChanged: (String newValue) {
+                                      setState(() {
+                                        climbMech = newValue;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                flex: 1,
+                                fit: FlexFit.tight
+                            ),
+                            Flexible(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: TextField(
+                                    textAlign: TextAlign.center,
+                                    controller: helpMechController,
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: '...'
+                                    ),
+                                    onChanged: (String newValue) {
+                                      setState(() {
+                                        helpMech = newValue;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                flex: 1,
+                                fit: FlexFit.tight
+                            ),
+                          ]
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(bottom: 8.0), child: Center(child: Text('Drive Team Experience', style: TextStyle(fontSize: 18, color: experienceRed.getBool() ? Color(0xFF902020) : Color(0xFFFFFFFF))))),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Row(
+                          children: <Widget>[
+                            Flexible(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: TextField(
+                                    textAlign: TextAlign.center,
+                                    controller: experienceController,
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: '...'
+                                    ),
+                                    onChanged: (String newValue) {
+                                      setState(() {
+                                        experience = newValue;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                flex: 1,
+                                fit: FlexFit.tight
+                            ),
+                          ]
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(bottom: 8.0), child: Center(child: Text('Notes', style: TextStyle(fontSize: 18, color: notesRed.getBool() ? Color(0xFF902020) : Color(0xFFFFFFFF))))),
+                    Padding(
+                        padding: EdgeInsets.only(bottom: 8.0),
+                        child: Row(
+                            children: <Widget>[
+                              Flexible(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                    child: TextField(
+                                      controller: notesController,
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: 'Note willingness to do defense, match strategy, etc.'
+                                      ),
+                                      onChanged: (String newValue) {
+                                        setState(() {
+                                          notes = newValue;
+                                        });
+                                      },
+                                      keyboardType: TextInputType.multiline,
+                                      maxLines: null,
+                                    ),
+                                  ),
+                                  flex: 1,
+                                  fit: FlexFit.tight
+                              )
+                            ]
+                        )
+                    ),
+                    Padding(
+                        padding: EdgeInsets.only(bottom: 8.0),
+                        child: Row(
+                            children: <Widget>[
+                              Flexible(
+                                  child: Padding(
+                                      padding: EdgeInsets.only(left: 8.0, right: 4.0),
+                                      child: RaisedButton(
+                                          child: Text('Reset'),
+                                          color: Color(0xFF97D700),
+                                          textColor: Color(0xFF51284F),
+                                          onPressed: resetDialog
+                                      )
+                                  ),
+                                  flex: 1,
+                                  fit: FlexFit.tight
+                              ),
+                              Flexible(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 4.0, right: 8.0),
+                                    child: RaisedButton(
+                                        child: Text('Submit'),
+                                        color: Color(0xFF97D700),
+                                        textColor: Color(0xFF51284F),
+                                        onPressed: submitDialog
+                                    ),
+                                  ),
+                                  flex: 1,
+                                  fit: FlexFit.tight
+                              )
+                            ]
+                        )
+                    ),
+                  ]
+                )
+              )
+            )
           ]
         )
     );

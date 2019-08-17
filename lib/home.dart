@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'instructions.dart';
 import 'objective.dart';
+import 'pit.dart';
 import 'settings.dart';
 
 class Home extends StatefulWidget {
@@ -15,7 +16,7 @@ class HomeState extends State<Home> {
   final List<Widget> children = [
     Instructions(),
     Objective(),
-    Instructions(),
+    Pit(),
     Instructions(),
     Settings()
   ];

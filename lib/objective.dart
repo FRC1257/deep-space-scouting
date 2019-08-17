@@ -195,7 +195,7 @@ class ObjectiveState extends State<Objective> { // This is the state of the widg
                 setState(() {
                   List<String> criteria = [event, team, match, initials, sandstormStart, sandstormPreload, sandstormHatch, sandstormCargo, endgameClimb, endgameHelp, notes];
                   List<Boolean> bools = [eventRed, teamRed, matchRed, initialsRed, sandstormStartRed, sandstormPreloadRed, sandstormHatchRed, sandstormCargoRed, endgameClimbRed, endgameHelpRed, notesRed];
-                  for (int i = 0; i < 11; i++) {
+                  for (int i = 0; i < criteria.length; i++) {
                     if (criteria[i] == '') {
                       flag = false;
                       bools[i].makeTrue();
@@ -237,17 +237,16 @@ class ObjectiveState extends State<Objective> { // This is the state of the widg
                           duration:  Duration(seconds: 2),
                           icon: IconTheme(data: IconThemeData(color: Color(0xFF902020)), child: Icon(Icons.error))
                       ).show(scaffold.currentContext);
-                    } else {
-                      Flushbar(
-                          title:  'Send unsuccessful',
-                          message:  'No connection',
-                          duration:  Duration(seconds: 2),
-                          icon: IconTheme(data: IconThemeData(color: Color(0xFF902020)), child: Icon(Icons.error))
-                      ).show(scaffold.currentContext);
                     }
                     writeText('objectiveLogs', 'objectiveErrorLog.txt', complete);
                   }
                   writeText('objectiveLogs', 'objectiveLog.txt', complete);
+                  Flushbar(
+                      title:  'Save successful',
+                      message:  'Match backed up on file system',
+                      duration:  Duration(seconds: 2),
+                      icon: IconTheme(data: IconThemeData(color: Color(0xFF209020)), child: Icon(Icons.check_circle))
+                  ).show(scaffold.currentContext);
                   reset();
                   // This is the response for if the data is not complete.
                   // Leave it unchanged.
