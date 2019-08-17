@@ -1,3 +1,20 @@
+// Comments like these will precede each block of code.
+// They are intended to provide the purpose for each part
+// of the general, ideally constant structure, and how to
+// apply it to future years of scouting apps. The instructions
+// for each block of code assume a constant code structure, but it is
+// not for me to say that this will happen (it probably won't). After all,
+// improvements can always, and should always, be made. The comments are
+// addressed to the people who will be modifying the 1257 app in the future
+// as this rebuild was both a starting point for Flutter and a half-template,
+// half-example for future scouting apps. Note that the comments made for the
+// objective page also generally apply to the pit page, as there is nothing
+// in the pit page that isn't in the objective page.
+
+// These import statements are necessary for getting the methods
+// in built-in packages specified in pubspec.yaml, core dart methods,
+// and other dart files in this project.
+// Leave them unchanged.
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -5,14 +22,20 @@ import 'package:flushbar/flushbar.dart';
 
 import 'useful.dart';
 
+// The following class is necessary for creating a stateful widget (a widget whose state changes).
 class Objective extends StatefulWidget {
   Objective ({Key key}) : super(key: key);
   @override
   ObjectiveState createState() => ObjectiveState();
 }
 
-class ObjectiveState extends State<Objective> {
+class ObjectiveState extends State<Objective> { // This is the state of the widget (i.e. its backbone).
+  // This GlobalKey is to make sure that the context (widget location reference)
+  // of Scaffold (the main framework) is passed to other methods for status updates.
+  // It stays unchanged.
   GlobalKey scaffold = GlobalKey();
+  // The following are the data points that hold the values entered in by fields.
+  // Declare them here.
   String event = '';
   String team = '';
   String match = '';
@@ -34,6 +57,9 @@ class ObjectiveState extends State<Objective> {
   String endgameClimb = '';
   String endgameHelp = '';
   String notes = '';
+  // These Booleans (custom boolean class passed by reference) determine for each REQUIRED field
+  // if they need to be filled in and are not. This determines whether the labels are red.
+  // Declare them for all required fields as shown here.
   Boolean eventRed = Boolean(false);
   Boolean teamRed = Boolean(false);
   Boolean matchRed = Boolean(false);
@@ -45,14 +71,23 @@ class ObjectiveState extends State<Objective> {
   Boolean endgameClimbRed = Boolean(false);
   Boolean endgameHelpRed = Boolean(false);
   Boolean notesRed = Boolean(false);
+  // These TextEditingControllers have to be declared to
+  // set the state for text fields each time a change occurs.
+  // Declare them for all text fields as shown here.
   TextEditingController teamController = TextEditingController();
   TextEditingController matchController = TextEditingController();
   TextEditingController initialsController = TextEditingController();
   TextEditingController sandstormHatchController = TextEditingController();
   TextEditingController sandstormCargoController = TextEditingController();
   TextEditingController notesController = TextEditingController();
+  // These variables (robot to scout and objective ID) are determined by the
+  // settings logs and must be set in the asynchronous methods below to read said logs.
+  // Leave them unchanged.
   String text = '';
   String ID = '';
+  // The reset method clears all variables and sets the TextEditingControllers
+  // to clear their fields. It also clears the Booleans, making all labels white.
+  // Implement it for all data points, TextEditingControllers, and Booleans as shown here.
   void reset() {
     setState(() {
       event = '';
@@ -82,12 +117,22 @@ class ObjectiveState extends State<Objective> {
       sandstormHatchController.clear();
       sandstormCargoController.clear();
       notesController.clear();
-      List<Boolean> bools = [eventRed, teamRed, matchRed, initialsRed, sandstormStartRed, sandstormPreloadRed, sandstormHatchRed, sandstormCargoRed, endgameClimbRed, endgameHelpRed, notesRed];
-      for (Boolean i in bools) {
-        i.makeFalse();
-      }
+      eventRed.makeFalse();
+      teamRed.makeFalse();
+      matchRed.makeFalse();
+      initialsRed.makeFalse();
+      sandstormStartRed.makeFalse();
+      sandstormPreloadRed.makeFalse();
+      sandstormHatchRed.makeFalse();
+      sandstormCargoRed.makeFalse();
+      endgameClimbRed.makeFalse();
+      endgameHelpRed.makeFalse();
+      notesRed.makeFalse();
     });
   }
+  // This reset dialog code calls the reset function if desired, but gives the
+  // user an option to back out if they clicked it by accident.
+  // Leave it unchanged.
   Future<void> resetDialog() async {
     return showDialog<void>(
       context: context,
@@ -121,6 +166,9 @@ class ObjectiveState extends State<Objective> {
       },
     );
   }
+  // The first part of this method, before the setState, does the same and sets up
+  // the dialog to confirm submission of the data gathered per match.
+  // Leave it unchanged.
   Future<void> submitDialog() async {
     return showDialog<void>(
       context: scaffold.currentContext,
@@ -141,6 +189,9 @@ class ObjectiveState extends State<Objective> {
               onPressed: () async {
                 Navigator.of(scaffold.currentContext).pop();
                 bool flag = true;
+                // This following setState uses a list of data points and their labels to color
+                // the labels of unfilled fields (checked by whether the data point is empty).
+                // Implement it with the required data points and Booleans you declared above.
                 setState(() {
                   List<String> criteria = [event, team, match, initials, sandstormStart, sandstormPreload, sandstormHatch, sandstormCargo, endgameClimb, endgameHelp, notes];
                   List<Boolean> bools = [eventRed, teamRed, matchRed, initialsRed, sandstormStartRed, sandstormPreloadRed, sandstormHatchRed, sandstormCargoRed, endgameClimbRed, endgameHelpRed, notesRed];
@@ -153,6 +204,9 @@ class ObjectiveState extends State<Objective> {
                     }
                   }
                 });
+                // The following, which is if the data is complete, makes sure the match value is uniform
+                // (whether it is 59 or q59 or Q59, or an eliminations match code like QF2m2 or sf1M3).
+                // Leave it unchanged.
                 if (flag) {
                   match = match.toUpperCase();
                   bool quals = false;
@@ -162,6 +216,9 @@ class ObjectiveState extends State<Objective> {
                   if ((match[0] != 'Q') && (quals == true)) {
                     match = 'Q' + match;
                   }
+                  // The following constructs and interprets the success of the web request.
+                  // Change the construction of the complete string based on your data points, but
+                  // leave everything else unchanged.
                   int millis = DateTime.now().millisecondsSinceEpoch;
                   String complete = '$event|$team|$match|$initials|$sandstormStart|$sandstormPreload|$sandstormHatch|$sandstormCargo|$cargoHigh|$cargoMedium|$cargoLow|$cargoShip|$cargoDropped|$hatchHigh|$hatchMedium|$hatchLow|$hatchShip|$hatchDropped|$endgameClimb|$endgameHelp|$notes|$millis|}';
                   int status = await makeRequest(ID, complete);
@@ -191,7 +248,9 @@ class ObjectiveState extends State<Objective> {
                     writeText('objectiveLogs', 'objectiveErrorLog.txt', complete);
                   }
                   writeText('objectiveLogs', 'objectiveLog.txt', complete);
-                  //reset();
+                  reset();
+                  // This is the response for if the data is not complete.
+                  // Leave it unchanged.
                 } else {
                   Flushbar(
                     title:  'Submit unsuccessful',
@@ -202,6 +261,8 @@ class ObjectiveState extends State<Objective> {
                 }
               },
             ),
+            // This is just the "no" option.
+            // Leave it unchanged.
             FlatButton(
               child: Text('No'),
               onPressed: () {
@@ -213,6 +274,8 @@ class ObjectiveState extends State<Objective> {
       },
     );
   }
+  // The following sets the above robot-to-scout and objective ID values.
+  // Leave it unchanged.
   @override
   void initState() {
     readText('settingsLogs', 'robot.txt').then((String txt) {
@@ -227,6 +290,20 @@ class ObjectiveState extends State<Objective> {
     });
     super.initState();
   }
+  // I'm not going to comment on every code sample here, as it is expansive and quite
+  // flexible (no pun intended) However, for layout purposes, I will outline the
+  // intended guideline for the structure of the screen.
+  // The code I use for padding should be fairly obvious, as it's there in the build method.
+  // HEADER: padding (L8R8T12B0), with center with title
+  // BODY: expanded, with child padding (V8), with ListView (scroller)
+  // EACH BLOCK in ListView: either a label row, widget row, or heading row
+  // LABEL ROW: flexed centered sets of labels
+  // WIDGET ROW: flexed centered sets of H8 padding (with each widget as a child), all in a B8 padding
+  // HEADING ROW: center with heading in a B8 padding
+  // The exception is reset and submit, which have L8R4 and L4R8 paddings respectively all in B8 padding
+  // Note that this is all just layout instruction, you can change it up to your ideal but make sure
+  // it's elegant, and not skewed/asymmetric/jank, because that distracts users from the app's
+  // intuitiveness, making it harder to use. Try to be somewhat perfectionistic with it.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
