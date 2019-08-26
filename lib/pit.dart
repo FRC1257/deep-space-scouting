@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flushbar/flushbar.dart';
 
@@ -111,7 +109,7 @@ class PitState extends State<Pit> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('All unsubmitted objective scouting information will be lost.'),
+                Text('All unsubmitted pit scouting information will be lost.'),
               ],
             ),
           ),
@@ -186,9 +184,9 @@ class PitState extends State<Pit> {
                           icon: IconTheme(data: IconThemeData(color: Color(0xFF902020)), child: Icon(Icons.error))
                       ).show(scaffold.currentContext);
                     }
-                    writeText('objectiveLogs', 'objectiveErrorLog.txt', complete);
+                    writeText('pitLogs', 'pitErrorLog.txt', complete, true);
                   }
-                  writeText('objectiveLogs', 'objectiveLog.txt', complete);
+                  writeText('pitLogs', 'pitLog.txt', complete, true);
                   Flushbar(
                       title:  'Save successful',
                       message:  'Match backed up on file system',

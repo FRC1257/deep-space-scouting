@@ -35,9 +35,14 @@ Future<File> localFile(String directory, String filename) async {
   return file;
 }
 
-Future<File> writeText(String directory, String filename, String text) async {
+Future<File> writeText(String directory, String filename, String text, bool append) async {
   final file = await localFile(directory, filename);
-  return file.writeAsString(text);
+  if (append) {
+    String current = await readText(directory, filename);
+    return file.writeAsString(current + text);
+  } else {
+    return file.writeAsString(text);
+  }
 }
 
 Future<String> readText(String directory, String filename) async {
@@ -46,14 +51,13 @@ Future<String> readText(String directory, String filename) async {
     String text = await file.readAsString();
     return text;
   } catch (e) {
-    return "error";
+    return "";
   }
 }
 
 Future<int> makeRequest(String formID, String text) async {
   try {
-    String url = Uri.encodeFull(
-        'https://docs.google.com/forms/d/e/$formID/formResponse?entry.615575561=$text&submit=Submit');
+    String url = Uri.encodeFull('https://docs.google.com/forms/d/e/$formID/formResponse?entry.615575561=$text&submit=Submit');
     http.Response res = await http.get(url);
     return res.statusCode;
   } catch (SocketException) {

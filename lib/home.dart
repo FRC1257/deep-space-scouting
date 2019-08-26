@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'instructions.dart';
 import 'objective.dart';
 import 'pit.dart';
+import 'send.dart';
 import 'settings.dart';
 
 class Home extends StatefulWidget {
@@ -17,7 +18,7 @@ class HomeState extends State<Home> {
     Instructions(),
     Objective(),
     Pit(),
-    Instructions(),
+    Send(),
     Settings()
   ];
   void onTabTapped(int index) {

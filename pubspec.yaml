@@ -1,5 +1,5 @@
 name: deep_space_scouting
-description: Team 1257 scouting app - 2019 Flutter rebuild
+description: Team 1257 Scouting App - 2019 Flutter Rebuild
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -26,12 +26,16 @@ dependencies:
   path_provider: ^1.2.0
   http: ^0.12.0+2
   flushbar: ^1.8.2
+  flutter_launcher_icons: ^0.7.2+1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/ic_launcher_round.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

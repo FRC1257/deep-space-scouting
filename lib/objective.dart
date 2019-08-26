@@ -230,17 +230,9 @@ class ObjectiveState extends State<Objective> { // This is the state of the widg
                         icon: IconTheme(data: IconThemeData(color: Color(0xFF209020)), child: Icon(Icons.check_circle))
                     ).show(scaffold.currentContext);
                   } else {
-                    if (status > 0) {
-                      Flushbar(
-                          title:  'Send unsuccessful',
-                          message:  'HTTP error code $status',
-                          duration:  Duration(seconds: 2),
-                          icon: IconTheme(data: IconThemeData(color: Color(0xFF902020)), child: Icon(Icons.error))
-                      ).show(scaffold.currentContext);
-                    }
-                    writeText('objectiveLogs', 'objectiveErrorLog.txt', complete);
+                    writeText('objectiveLogs', 'objectiveErrorLog.txt', complete, true);
                   }
-                  writeText('objectiveLogs', 'objectiveLog.txt', complete);
+                  writeText('objectiveLogs', 'objectiveLog.txt', complete, true);
                   Flushbar(
                       title:  'Save successful',
                       message:  'Match backed up on file system',
@@ -306,6 +298,8 @@ class ObjectiveState extends State<Objective> { // This is the state of the widg
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // The following key line is not part of the structure but put in here to specify the GlobalKey above.
+      // Leave it unchanged.
         key: scaffold,
         body: Column(
           children: <Widget>[

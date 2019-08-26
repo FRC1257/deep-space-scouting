@@ -20,7 +20,7 @@ class SettingsState extends State<Settings> {
       setState(() {
         if ((rbt == '') || (rbt == null)) {
           rbt = 'Nearest Red';
-          writeText('settingsLogs', 'robot.txt', rbt);
+          writeText('settingsLogs', 'robot.txt', rbt, false);
         }
         robot = rbt;
       });
@@ -29,7 +29,7 @@ class SettingsState extends State<Settings> {
       setState(() {
         if ((oid == '') || (oid == null)) {
           oid = '1FAIpQLSd576eCt6nkJw0oHGq0vO4vg-MysOsgl_XLs2bbCAP8LmYB5Q';
-          writeText('settingsLogs', 'oid.txt', oid);
+          writeText('settingsLogs', 'oid.txt', oid, false);
         }
         objectiveID = oid;
         oidController.text = objectiveID;
@@ -39,7 +39,7 @@ class SettingsState extends State<Settings> {
       setState(() {
         if ((pid == '') || (pid == null)) {
           pid = '1Ak6eePtfBNeRiirdBNp8R7jAu2uxjrTve2DBVRKbbaQ';
-          writeText('settingsLogs', 'pid.txt', pid);
+          writeText('settingsLogs', 'pid.txt', pid, false);
         }
         pitID = pid;
         pidController.text = pitID;
@@ -77,7 +77,7 @@ class SettingsState extends State<Settings> {
                                         onChanged: (String newValue) {
                                           setState(() {
                                             robot = newValue;
-                                            writeText('settingsLogs', 'robot.txt', robot);
+                                            writeText('settingsLogs', 'robot.txt', robot, false);
                                           });
                                         },
                                         items: <String>['Nearest Red', 'Middle Red', 'Farthest Red', 'Nearest Blue', 'Middle Blue', 'Farthest Blue'].map<DropdownMenuItem<String>>((String value) {
@@ -129,13 +129,12 @@ class SettingsState extends State<Settings> {
                                           child: Text('Save'),
                                           color: Color(0xFF97D700),
                                           textColor: Color(0xFF51284F),
-                                          onPressed: () => writeText('settingsLogs', 'oid.txt', objectiveID)
+                                          onPressed: () => writeText('settingsLogs', 'oid.txt', objectiveID, false)
                                       )
                                   ),
                                   flex: 1,
                                   fit: FlexFit.tight
                               ),
-
                             ]
                         ),
                         Row(
@@ -173,7 +172,7 @@ class SettingsState extends State<Settings> {
                                           child: Text('Save'),
                                           color: Color(0xFF97D700),
                                           textColor: Color(0xFF51284F),
-                                          onPressed: () => writeText('settingsLogs', 'pid.txt', pitID)
+                                          onPressed: () => writeText('settingsLogs', 'pid.txt', pitID, false)
                                       )
                                   ),
                                   flex: 1,
