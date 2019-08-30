@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flushbar/flushbar.dart';
 
 import 'useful.dart';
@@ -11,7 +12,9 @@ class Send extends StatefulWidget {
   @override
   SendState createState() => SendState();
 }
+
 class SendState extends State<Send> {
+  static const platform = const MethodChannel('org.team1257.deepspacescouting/send');
   GlobalKey scaffold = GlobalKey();
   String dataType = 'Objective';
   String logType = 'Error';
@@ -19,6 +22,8 @@ class SendState extends State<Send> {
   String data = '';
   String OID;
   String PID;
+  String dev = '';
+  List<dynamic> devs = <dynamic>[];
   TextEditingController dataController = new TextEditingController();
   @override
   void initState() {
@@ -32,7 +37,21 @@ class SendState extends State<Send> {
         PID = id;
       });
     });
+    getDeviceNames();
     super.initState();
+  }
+  void getDeviceNames() async {
+    try {
+      devs = await platform.invokeMethod('getDeviceNames');
+      dev = devs[0];
+    } on PlatformException catch (e) {
+      Flushbar(
+          title:  'Device listing unsuccessful',
+          message:  'Cannot get Bluetooth device list: ${e.message}',
+          duration:  Duration(seconds: 2),
+          icon: IconTheme(data: IconThemeData(color: Color(0xFF902020)), child: Icon(Icons.error))
+      ).show(scaffold.currentContext);
+    }
   }
   void load() async {
     String mLog = logType == 'Complete' ? "" : logType;
@@ -59,7 +78,7 @@ class SendState extends State<Send> {
       }
       if (status == 200) {
         Flushbar(
-            title:  'Send successful',
+            title:  'Upload successful',
             message:  'Data sent to spreadsheet',
             duration:  Duration(seconds: 2),
             icon: IconTheme(data: IconThemeData(color: Color(0xFF209020)), child: Icon(Icons.check_circle))
@@ -68,20 +87,149 @@ class SendState extends State<Send> {
       } else {
         if (status > 0) {
           Flushbar(
-              title:  'Send unsuccessful',
+              title:  'Upload unsuccessful',
               message:  'HTTP error code $status',
               duration:  Duration(seconds: 2),
               icon: IconTheme(data: IconThemeData(color: Color(0xFF902020)), child: Icon(Icons.error))
           ).show(scaffold.currentContext);
         } else {
           Flushbar(
-              title:  'Send unsuccessful',
+              title:  'Upload unsuccessful',
               message:  'No connection',
               duration:  Duration(seconds: 2),
               icon: IconTheme(data: IconThemeData(color: Color(0xFF902020)), child: Icon(Icons.error))
           ).show(scaffold.currentContext);
         }
       }
+    }
+  }
+  Future<String> acceptDialog() async {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text('Accept connections?'),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: dev,
+                          onChanged: (String newValue) {
+                            setState(() {
+                              dev = newValue;
+                            });
+                          },
+                          items: devs.cast<String>().toList().map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        )
+                    ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Yes'),
+                  onPressed: () {
+                    Navigator.of(scaffold.currentContext).pop();
+                    accept();
+                  },
+                ),
+                FlatButton(
+                  child: Text('No'),
+                  onPressed: () {
+                    Navigator.of(scaffold.currentContext).pop();
+                  },
+                ),
+              ],
+            );
+          });
+      },
+    );
+    return dev;
+  }
+  void accept() async {
+    try {
+      data = await platform.invokeMethod('acceptConnections', {'name': dev});
+      dataController.text = data;
+    } on PlatformException catch (e) {
+      Flushbar(
+          title:  'Accept unsuccessful',
+          message:  '${e.message}',
+          duration:  Duration(seconds: 2),
+          icon: IconTheme(data: IconThemeData(color: Color(0xFF902020)), child: Icon(Icons.error))
+      ).show(scaffold.currentContext);
+    }
+  }
+  Future<String> sendDialog() async {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+            builder: (context, setState) {
+              return AlertDialog(
+                title: Text('Send data?'),
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: dev,
+                            onChanged: (String newValue) {
+                              setState(() {
+                                dev = newValue;
+                              });
+                            },
+                            items: devs.cast<String>().toList().map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                          )
+                      ),
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('Yes'),
+                    onPressed: () {
+                      Navigator.of(scaffold.currentContext).pop();
+                      send();
+                    },
+                  ),
+                  FlatButton(
+                    child: Text('No'),
+                    onPressed: () {
+                      Navigator.of(scaffold.currentContext).pop();
+                    },
+                  ),
+                ],
+              );
+            });
+      },
+    );
+    return dev;
+  }
+  void send() async {
+    try {
+      platform.invokeMethod('sendData', {'name': dev, 'data': data});
+    } on PlatformException catch (e) {
+      Flushbar(
+          title:  'Send unsuccessful',
+          message:  '${e.message}',
+          duration:  Duration(seconds: 2),
+          icon: IconTheme(data: IconThemeData(color: Color(0xFF902020)), child: Icon(Icons.error))
+      ).show(scaffold.currentContext);
     }
   }
   @override
@@ -185,6 +333,7 @@ class SendState extends State<Send> {
                                                   child: Text('Accept Connections'),
                                                   color: Color(0xFF97D700),
                                                   textColor: Color(0xFF51284F),
+                                                  onPressed: acceptDialog
                                               ),
                                             ),
                                             flex: 1,
@@ -244,6 +393,7 @@ class SendState extends State<Send> {
                                                 child: Text('Send Data'),
                                                 color: Color(0xFF97D700),
                                                 textColor: Color(0xFF51284F),
+                                                onPressed: sendDialog,
                                               ),
                                             ),
                                             flex: 1,

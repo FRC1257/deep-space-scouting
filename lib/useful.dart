@@ -60,7 +60,7 @@ Future<int> makeRequest(String formID, String text) async {
     String url = Uri.encodeFull('https://docs.google.com/forms/d/e/$formID/formResponse?entry.615575561=$text&submit=Submit');
     http.Response res = await http.get(url);
     return res.statusCode;
-  } catch (SocketException) {
+  } on SocketException {
     return 0;
   }
 }

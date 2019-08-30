@@ -231,14 +231,15 @@ class ObjectiveState extends State<Objective> { // This is the state of the widg
                     ).show(scaffold.currentContext);
                   } else {
                     writeText('objectiveLogs', 'objectiveErrorLog.txt', complete, true);
+                    Flushbar(
+                        title:  'Save successful',
+                        message:  'Match backed up on file system',
+                        duration:  Duration(seconds: 2),
+                        icon: IconTheme(data: IconThemeData(color: Color(0xFF209020)), child: Icon(Icons.check_circle))
+                    ).show(scaffold.currentContext);
                   }
                   writeText('objectiveLogs', 'objectiveLog.txt', complete, true);
-                  Flushbar(
-                      title:  'Save successful',
-                      message:  'Match backed up on file system',
-                      duration:  Duration(seconds: 2),
-                      icon: IconTheme(data: IconThemeData(color: Color(0xFF209020)), child: Icon(Icons.check_circle))
-                  ).show(scaffold.currentContext);
+
                   reset();
                   // This is the response for if the data is not complete.
                   // Leave it unchanged.
