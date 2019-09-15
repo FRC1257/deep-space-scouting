@@ -32,10 +32,12 @@ public class MainActivity extends FlutterActivity {
     private UUID devuuid;
     private ConnectedThread cdt;
     private String incomingMessage = "";
+    private MethodChannel channel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GeneratedPluginRegistrant.registerWith(this);
+        channel = new MethodChannel(getFlutterView(), "org.team1257.deepspacescouting/send");
         new MethodChannel(getFlutterView(), "org.team1257.deepspacescouting/send").setMethodCallHandler(
                 new MethodCallHandler() {
                     @Override
@@ -45,8 +47,8 @@ public class MainActivity extends FlutterActivity {
                             result.success(devs);
                         }
                         if (call.method.equals("acceptConnections")) {
-                            String message = pairDevice(call.argument("name"));
-                            result.success(message);
+                            pairDevice(call.argument("name"));
+                            result.success("");
                         }
                         if (call.method.equals("sendData")) {
                             pairDevices(call.argument("name"));
@@ -154,6 +156,12 @@ public class MainActivity extends FlutterActivity {
                 try {
                     bytes = in.read(buffer);
                     incomingMessage = new String(buffer, 0, bytes);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            channel.invokeMethod("accept", incomingMessage);
+                        }
+                    });
                 } catch (IOException e) {
                     e.printStackTrace();
                     break;
@@ -179,8 +187,7 @@ public class MainActivity extends FlutterActivity {
         cdt = new ConnectedThread(asocket);
         cdt.start();
     }
-    public String pairDevice(String name) {
-        incomingMessage = "";
+    public void pairDevice(String name) {
         Set<BluetoothDevice> pairedDevices = ba.getBondedDevices();
         if (pairedDevices.size() > 0) {
             Object[] devices = pairedDevices.toArray();
@@ -196,12 +203,6 @@ public class MainActivity extends FlutterActivity {
             ConnectThread connect = new ConnectThread(device, uuid);
             connect.start();
         }
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return incomingMessage;
     }
     public void pairDevices(String name) {
         Set<BluetoothDevice> pairedDevices = ba.getBondedDevices();

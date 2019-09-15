@@ -38,7 +38,14 @@ class SendState extends State<Send> {
       });
     });
     getDeviceNames();
+    platform.setMethodCallHandler(handleAccept);
     super.initState();
+  }
+  Future<dynamic> handleAccept(MethodCall call) async {
+    if (call.method == 'accept') {
+      dataController.text = call.arguments;
+      return new Future.value(data);
+    }
   }
   void getDeviceNames() async {
     try {
@@ -158,7 +165,6 @@ class SendState extends State<Send> {
   void accept() async {
     try {
       data = await platform.invokeMethod('acceptConnections', {'name': dev});
-      dataController.text = data;
     } on PlatformException catch (e) {
       Flushbar(
           title:  'Accept unsuccessful',
