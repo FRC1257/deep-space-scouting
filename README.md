@@ -27,6 +27,7 @@ Setup and Use
 If you want to use this to have a scouting system, you will need 6 devices. Please contact us at scouting1257@gmail.com for us to generate analysis spreadsheets and prefilled form links for data input for you (else the app data will be useless). You will need to: 
   * take the form IDs for the links and put them into the settings under Objective and Pit 
   * change the robot to scout under the settings page for each device to a different robot
+
 The scouting itself is fairly self-explanatory - just fill out the fields and submit.
 
 To send data, you can
