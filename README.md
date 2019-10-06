@@ -28,6 +28,7 @@ If you want to use this to have a scouting system, you will need 6 devices. Plea
   * take the form IDs for the links and put them into the settings under Objective and Pit 
   * change the robot to scout under the settings page for each device to a different robot
 The scouting itself is fairly self-explanatory - just fill out the fields and submit.
+
 To send data, you can
   * just submit when scouting if your device has an Internet connection at the time
   * load and upload error logs on the Send screen whenever your device has an internet connection
