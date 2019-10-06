@@ -16,6 +16,14 @@ class SettingsState extends State<Settings> {
   TextEditingController pidController = TextEditingController();
   @override
   void initState() {
+    readText('settingsLogs', 'team.txt').then((String tm) {
+      setState(() {
+        if ((tm == '') || (tm == null)) {
+          tm = '1257';
+          writeText('settingsLogs', 'team.txt', tm, false);
+        }
+      });
+    });
     readText('settingsLogs', 'robot.txt').then((String rbt) {
       setState(() {
         if ((rbt == '') || (rbt == null)) {
@@ -178,7 +186,6 @@ class SettingsState extends State<Settings> {
                                   flex: 1,
                                   fit: FlexFit.tight
                               ),
-
                             ]
                         ),
                       ]

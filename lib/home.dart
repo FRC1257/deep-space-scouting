@@ -13,7 +13,15 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
+  String team = '';
   int currentIndex = 0;
+  void initState() {
+    homeCallback();
+    super.initState();
+  }
+  void homeCallback() {
+
+  }
   final List<Widget> children = [
     Instructions(),
     Objective(),
@@ -30,7 +38,7 @@ class HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Team 1257 Scouting App: 2019')
+        title: Text('Deep Space Scouting App')
       ),
       body: children[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
