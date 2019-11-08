@@ -30,11 +30,24 @@ class ScoutAppState extends State<ScoutApp> {
           backgroundColor: Color(0xFF222326),
           fontFamily: 'Noto Sans'
       ),
-      home: Scaffold(
-        appBar: AppBar(
-            title: Text('Deep Space Scouting App')
-        ),
-        body: Home(),
+      home: Stack(
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('assets/1257background.png'),
+                    fit: BoxFit.cover
+                ),
+              ),
+            ),
+            Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: AppBar(
+                title: Text('Deep Space Scouting App')
+              ),
+              body: Home()
+            )
+          ]
       )
     );
   }

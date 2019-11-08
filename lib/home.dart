@@ -32,19 +32,13 @@ class HomeState extends State<Home> {
   }
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('assets/1257background.png'),
-                fit: BoxFit.cover),
-          ),
-        ),
-        Opacity(
-          child: Scaffold(
-            body: Opacity(child: children[currentIndex], opacity: .5),
-            bottomNavigationBar: BottomNavigationBar(
+    return Scaffold(
+          body: children[currentIndex],
+          backgroundColor: Colors.transparent,
+          bottomNavigationBar: Theme(
+            data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
+            child: BottomNavigationBar(
+
               onTap: onTabTapped,
               currentIndex: currentIndex,
               items: [
@@ -100,10 +94,7 @@ class HomeState extends State<Home> {
                 )
               ],
             ),
-          ),
-          opacity: .85
-        ),
-      ],
+          )
     );
   }
 }

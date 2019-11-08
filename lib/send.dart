@@ -242,6 +242,7 @@ class SendState extends State<Send> {
   Widget build(BuildContext context) {
     if (Platform.isAndroid) {
       return Scaffold(
+          backgroundColor: Colors.transparent,
           key: scaffold,
           body: Column(
               children: <Widget>[
@@ -417,6 +418,7 @@ class SendState extends State<Send> {
       );
     } else {
       return Scaffold(
+          backgroundColor: Colors.transparent,
           key: scaffold,
           body: Column(
               children: <Widget>[

@@ -231,6 +231,7 @@ class PitState extends State<Pit> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.transparent,
         key: scaffold,
         body: Column(
           children: <Widget>[

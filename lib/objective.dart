@@ -299,6 +299,7 @@ class ObjectiveState extends State<Objective> { // This is the state of the widg
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.transparent,
       // The following key line is not part of the structure but put in here to specify the GlobalKey above.
       // Leave it unchanged.
         key: scaffold,
