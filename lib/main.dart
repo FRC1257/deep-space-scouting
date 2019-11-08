@@ -22,12 +22,12 @@ class ScoutAppState extends State<ScoutApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Deep Space Scouting', // year-specific
+      title: 'Team 1257 Scouting App: 2019', // year-specific
       theme: ThemeData(
           brightness: Brightness.dark,
           primaryColor: Color(0xFF51284F),
           accentColor: Color(0xFF97D700),
-          backgroundColor: Color(0xFF222326),
+          backgroundColor: Colors.transparent,
           fontFamily: 'Noto Sans'
       ),
       home: Stack(
@@ -43,7 +43,8 @@ class ScoutAppState extends State<ScoutApp> {
             Scaffold(
               backgroundColor: Colors.transparent,
               appBar: AppBar(
-                title: Text('Deep Space Scouting App')
+                  backgroundColor: Colors.transparent,
+                title: Text('Team 1257 Scouting App: 2019')
               ),
               body: Home()
             )

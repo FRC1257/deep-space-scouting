@@ -10,6 +10,7 @@
 // half-example for future scouting apps. Note that the comments made for the
 // objective page also generally apply to the pit page, as there is nothing
 // in the pit page that isn't in the objective page.
+// - Harsh Tiwary, 2019
 
 // These import statements are necessary for getting the methods
 // in built-in packages specified in pubspec.yaml, core dart methods,
