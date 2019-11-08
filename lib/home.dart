@@ -16,11 +16,7 @@ class HomeState extends State<Home> {
   String team = '';
   int currentIndex = 0;
   void initState() {
-    homeCallback();
     super.initState();
-  }
-  void homeCallback() {
-
   }
   final List<Widget> children = [
     Instructions(),
@@ -36,67 +32,78 @@ class HomeState extends State<Home> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Deep Space Scouting App')
-      ),
-      body: children[currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: onTabTapped,
-        currentIndex: currentIndex,
-        items: [
-          BottomNavigationBarItem(
-            icon: IconTheme(
-              data: IconThemeData(color: Color(0xFF97D700)),
-              child: Icon(Icons.playlist_add_check),
-            ),
-              title: Text(
-                'Instructions',
-                style: TextStyle(color: Color(0xFF97D700)),
-              )
+    return Stack(
+      children: <Widget>[
+        Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/1257background.png'),
+                fit: BoxFit.cover),
           ),
-          BottomNavigationBarItem(
-            icon: IconTheme(
-              data: IconThemeData(color: Color(0xFF97D700)),
-              child: Icon(Icons.web),
+        ),
+        Opacity(
+          child: Scaffold(
+            body: Opacity(child: children[currentIndex], opacity: .5),
+            bottomNavigationBar: BottomNavigationBar(
+              onTap: onTabTapped,
+              currentIndex: currentIndex,
+              items: [
+                BottomNavigationBarItem(
+                    icon: IconTheme(
+                      data: IconThemeData(color: Color(0xFF97D700)),
+                      child: Icon(Icons.playlist_add_check),
+                    ),
+                    title: Text(
+                      'Instructions',
+                      style: TextStyle(color: Color(0xFF97D700)),
+                    )
+                ),
+                BottomNavigationBarItem(
+                    icon: IconTheme(
+                      data: IconThemeData(color: Color(0xFF97D700)),
+                      child: Icon(Icons.web),
+                    ),
+                    title: Text(
+                      'Objective',
+                      style: TextStyle(color: Color(0xFF97D700)),
+                    )
+                ),
+                BottomNavigationBarItem(
+                    icon: IconTheme(
+                      data: IconThemeData(color: Color(0xFF97D700)),
+                      child: Icon(Icons.dashboard),
+                    ),
+                    title: Text(
+                      'Pit',
+                      style: TextStyle(color: Color(0xFF97D700)),
+                    )
+                ),
+                BottomNavigationBarItem(
+                    icon: IconTheme(
+                      data: IconThemeData(color: Color(0xFF97D700)),
+                      child: Icon(Icons.send),
+                    ),
+                    title: Text(
+                      'Send',
+                      style: TextStyle(color: Color(0xFF97D700)),
+                    )
+                ),
+                BottomNavigationBarItem(
+                    icon: IconTheme(
+                      data: IconThemeData(color: Color(0xFF97D700)),
+                      child: Icon(Icons.settings),
+                    ),
+                    title: Text(
+                      'Settings',
+                      style: TextStyle(color: Color(0xFF97D700)),
+                    )
+                )
+              ],
             ),
-              title: Text(
-                'Objective',
-                style: TextStyle(color: Color(0xFF97D700)),
-              )
           ),
-          BottomNavigationBarItem(
-            icon: IconTheme(
-              data: IconThemeData(color: Color(0xFF97D700)),
-              child: Icon(Icons.dashboard),
-            ),
-              title: Text(
-                'Pit',
-                style: TextStyle(color: Color(0xFF97D700)),
-              )
-          ),
-          BottomNavigationBarItem(
-            icon: IconTheme(
-              data: IconThemeData(color: Color(0xFF97D700)),
-              child: Icon(Icons.send),
-            ),
-              title: Text(
-                'Send',
-                style: TextStyle(color: Color(0xFF97D700)),
-              )
-          ),
-          BottomNavigationBarItem(
-            icon: IconTheme(
-              data: IconThemeData(color: Color(0xFF97D700)),
-              child: Icon(Icons.settings),
-            ),
-            title: Text(
-              'Settings',
-              style: TextStyle(color: Color(0xFF97D700)),
-            )
-          )
-        ],
-      ),
+          opacity: .85
+        ),
+      ],
     );
   }
 }

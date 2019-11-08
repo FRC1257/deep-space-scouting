@@ -36,6 +36,7 @@ flutter_icons:
   android: true
   ios: true
   image_path: "assets/ic_launcher_round.png"
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -46,6 +47,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - assets/1257background.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

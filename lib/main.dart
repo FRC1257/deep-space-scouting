@@ -27,9 +27,15 @@ class ScoutAppState extends State<ScoutApp> {
           brightness: Brightness.dark,
           primaryColor: Color(0xFF51284F),
           accentColor: Color(0xFF97D700),
+          backgroundColor: Color(0xFF222326),
           fontFamily: 'Noto Sans'
       ),
-      home: Home(),
+      home: Scaffold(
+        appBar: AppBar(
+            title: Text('Deep Space Scouting App')
+        ),
+        body: Home(),
+      )
     );
   }
 }
